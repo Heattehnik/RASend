@@ -32,3 +32,4 @@ def load_counters(date: str) -> list:
     return counters
 
 
+
