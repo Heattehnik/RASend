@@ -26,9 +26,9 @@ def make_dict(list_: list) -> dict:
             'valid_for': item[11],
             'si_type': item[3],
             'conclusion': item[12],
-            'surname': item[23],
-            'name': item[24],
-            'patronymic': item[25],
+            'surname': item[24],
+            'name': item[25],
+            'patronymic': item[26],
         }
     return dict_
 
@@ -53,7 +53,7 @@ def main(dict_: dict) -> tuple:
             registry_num = value['ngr']
             splited_verification_date = value['verification_date'].partition(' ')[0].split('-')
             splited_verification_date.reverse()
-            verification_date = ''.join(splited_verification_date)
+            verification_date = f'{splited_verification_date[1]}{splited_verification_date[0]}{splited_verification_date[2]}'               # ''.join(splited_verification_date)
             print(verification_date)
             vaild_for = value['valid_for']
             sitype = value['si_type']
