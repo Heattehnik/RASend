@@ -1,0 +1,2 @@
+selenium~=4.8.3
+pyTelegramBotAPI~=4.10.0
