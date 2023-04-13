@@ -4,6 +4,7 @@ from functions import load_counters, make_dict, main
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
+
 @bot.message_handler(commands=['go'])
 def welcome(message):
     bot.send_message(message.chat.id, 'Введите дату для выгрузки!')
@@ -17,11 +18,4 @@ def work_process(message):
     bot.send_message(message.chat.id, f'Обработанно {result[0]} из {result[1]}. Ошибок {result[2]}')
 
 
-
-
 bot.polling()
-
-
-
-
-
