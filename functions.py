@@ -1,8 +1,6 @@
 import sqlite3
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from time import sleep
 from env import DATA_BASE
@@ -111,6 +109,3 @@ def main(dict_: dict) -> tuple:
             errors_count += 1
             continue
     return iteration, len(dict_), errors_count
-
-
-
