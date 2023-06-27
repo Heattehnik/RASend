@@ -4,9 +4,23 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from time import sleep
 from env import DATA_BASE
+import requests
+import time
 
 connect = sqlite3.connect(DATA_BASE, check_same_thread=False)
 cursor = connect.cursor()
+
+
+def request(date):
+    cursor.execute('SELECT * FROM uploaded_data WHERE verification_date LIKE "%{date}%"')
+    counters = cursor.fetchall()
+    final_dict = {}
+    length = 0
+    for counter in counters:
+        response = requests.get(f'https://fgis.gost.ru/fundmetrology/eapi/vri?search=Индивидуальный?предприниматель?Дьяченко?Алексей?Олегович&verification_date={counter[9]}&mi_number={counter[2]}')
+        final_dict[length] = response
+        length += 1
+        time.sleep(1)
 
 
 def load_counters(date: str) -> list:
