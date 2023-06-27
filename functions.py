@@ -11,16 +11,36 @@ connect = sqlite3.connect(DATA_BASE, check_same_thread=False)
 cursor = connect.cursor()
 
 
+def find_spaces():
+    cursor.execute(f'SELECT * FROM uploaded_data WHERE si_number LIKE " %"')
+    fetch = cursor.fetchall()
+    for counter in fetch:
+        cursor.execute(f'UPDATE uploaded_data SET si_number = "{counter[4].strip()}" WHERE si_number = "{counter[4]}"')
+        connect.commit()
+
+
 def request(date):
-    cursor.execute('SELECT * FROM uploaded_data WHERE verification_date LIKE "%{date}%"')
+    cursor.execute(f'SELECT * FROM uploaded_data WHERE verification_date LIKE "%{date}%"')
     counters = cursor.fetchall()
     final_dict = {}
     length = 0
     for counter in counters:
-        response = requests.get(f'https://fgis.gost.ru/fundmetrology/eapi/vri?search=Индивидуальный?предприниматель?Дьяченко?Алексей?Олегович&verification_date={counter[9]}&mi_number={counter[2]}')
-        final_dict[length] = response
-        length += 1
-        time.sleep(1)
+        params = {
+            'search': 'Индивидуальный?предприниматель?Дьяченко?Алексей?Олегович',
+            'verification_date': date,
+            'mi_number': counter[4]
+        }
+        response = requests.get(f'https://fgis.gost.ru/fundmetrology/eapi/vri', params)
+        print('Ответ получен')
+        try:
+            if response.json().get('result').get('items')[0]:
+                final_dict[length] = response.json()['result']['items'][0]
+                length += 1
+        except IndexError or AttributeError:
+            print(counter[4])
+        print(counter[4])
+        time.sleep(0.5)
+    print(final_dict)
 
 
 def load_counters(date: str) -> list:
@@ -123,3 +143,9 @@ def main(dict_: dict) -> tuple:
             errors_count += 1
             continue
     return iteration, len(dict_), errors_count
+
+
+if __name__ == '__main__':
+    # find_spaces()
+    request('2023-06-19')
+
